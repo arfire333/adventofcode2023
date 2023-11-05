@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "name": "(msvc) < example.input",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${command:cmake.launchTargetPath}",
+      "args": [
+        "<",
+        "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/example.input",
+      ],
+      "stopAtEntry": false,
+      "cwd": "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/",
+    },
+    {
+      "name": "(msvc) < user.input",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${command:cmake.launchTargetPath}",
+      "args": [
+        "<",
+        "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/user.input",
+      ],
+      "stopAtEntry": false,
+      "cwd": "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/",
+    }
+  ]
+}

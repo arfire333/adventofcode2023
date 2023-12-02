@@ -11,6 +11,7 @@
       ],
       "stopAtEntry": false,
       "cwd": "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/",
+      "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "name": "(msvc) < user.input",
@@ -23,6 +24,33 @@
       ],
       "stopAtEntry": false,
       "cwd": "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/",
+      "internalConsoleOptions": "openOnSessionStart"
+<<<<<<< Updated upstream
     }
+=======
+    },
+    {
+      "name": "(msvc) < example2.input",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${command:cmake.launchTargetPath}",
+      "args": [
+        "<",
+        "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/example2.input",
+      ],
+      "stopAtEntry": false,
+      "cwd": "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/",
+      "internalConsoleOptions": "openOnSessionStart"
+    },  
+    {
+      "name": "(msvc) ",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${command:cmake.launchTargetPath}",
+      "stopAtEntry": false,
+      "cwd": "${command:cmake.activeFolderPath}",
+      "internalConsoleOptions": "openOnSessionStart"
+    },  
+>>>>>>> Stashed changes
   ]
 }

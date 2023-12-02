@@ -12,3 +12,4 @@
 - The `.vscode/launch.json` file is oriented towards Microsoft Visual Studio.  Extra configurations can be added
 to do the same thing with other build systems such as gdb and Linux.  It is only present to reduce keystrokes during testing. :)
 - The default `F5` in VSCode requires the `default build target` to be a target whose name matches the folder it is contained in. The `target to launch` can be any of the executables in the same folder.
+- The 2021 stuff is a warmup.

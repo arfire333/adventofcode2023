@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(cdatastructures)
@@ -38,3 +38,7 @@ endif()
 
 
 add_subdirectory( template )
+add_subdirectory( 2021day01 )
+add_subdirectory( 2021day02 )
+add_subdirectory( 2021day03 )
+add_subdirectory( 2023day01 )

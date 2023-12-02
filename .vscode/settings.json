@@ -1,0 +1,6 @@
+{
+  "cmake.debugConfig.args": [
+    "<",
+    "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/user.input"
+  ]
+}

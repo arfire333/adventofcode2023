@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(cdatastructures)
 
 enable_testing()
+
 include(FetchContent)
 # Google Test
 FetchContent_Declare(
@@ -42,3 +43,4 @@ add_subdirectory( 2021day01 )
 add_subdirectory( 2021day02 )
 add_subdirectory( 2021day03 )
 add_subdirectory( 2023day01 )
+add_subdirectory( 2023day02 )

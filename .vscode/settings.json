@@ -1,6 +1,9 @@
 {
-  "cmake.debugConfig.args": [
-    "<",
-    "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/user.input"
-  ]
+  "cmake.debugConfig": {
+    "args": [
+      "<",
+      "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/user.input"
+    ]
+  },
+  "editor.formatOnSave": true
 }

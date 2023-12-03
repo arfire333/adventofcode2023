@@ -1,5 +1,6 @@
 # Advent of Code 2023
-
+![CodeQL](https://github.com/arfire333/adventofcode2023/actions/workflows/codeql.yml/badge.svg)
+![Multi PLatform Build](https://github.com/arfire333/adventofcode2023/actions/workflows/cmake-multi-platform.yml/badge.svg)
 ## Dependencies
  - [CMake](https://cmake.org) - The Build System.
  - [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) - Used for launch debugging with input redirection.  

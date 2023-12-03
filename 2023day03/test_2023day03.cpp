@@ -13,7 +13,7 @@ std::string somedata =
     "..592.....\n"
     "......755.\n"
     "...$.*....\n"
-    ".664.598..\n";
+    ".664.598..";
 
 struct membuf : std::streambuf {
   membuf(char const* base, size_t size) {
@@ -27,7 +27,7 @@ struct imemstream : virtual membuf, std::istream {
 };
 
 TEST(Test2023Day03, getData) {
-  std::vector<std::vector<char>> schematic;
+  std::vector<std::string> schematic;
   imemstream in(somedata.c_str(), somedata.size());
 
   getData(in, schematic);
@@ -36,7 +36,7 @@ TEST(Test2023Day03, getData) {
 }
 
 TEST(Test2023Day03, adjacent) {
-  std::vector<std::vector<char>> schematic;
+  std::vector<std::string> schematic;
   imemstream in(somedata.c_str(), somedata.size());
   getData(in, schematic);
 
@@ -53,10 +53,10 @@ TEST(Test2023Day03, adjacent) {
   ASSERT_FALSE(isAdjacent(schematic, 9, 9, gear));
   ASSERT_FALSE(isAdjacent(schematic, 9, 0, gear));
 
-  std::vector<int64_t> numbers;
   map<int64_t, set<int64_t>> gear2part;
-  findNumbers(schematic, numbers, gear2part);
-  int64_t result = ratioSum(gear2part);
-  ASSERT_EQ(result, 467835);
-  ASSERT_TRUE(numbers.size() > 0);
+  int64_t sum = findNumbers(schematic, gear2part);
+  ASSERT_EQ(sum, 4361);
+
+  int64_t ratio_sum = ratioSum(gear2part);
+  ASSERT_EQ(ratio_sum, 467835);
 }

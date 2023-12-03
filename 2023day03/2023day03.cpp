@@ -8,7 +8,7 @@
 
 using namespace std;
 
-bool isAdjacent(const vector<vector<char>>& schematic,
+bool isAdjacent(const vector<string>& schematic,
                 int row,
                 int col,
                 int64_t& gear) {
@@ -20,9 +20,7 @@ bool isAdjacent(const vector<vector<char>>& schematic,
       int colj = col + j;
       if (i == 0 && j == 0)
         continue;  // same as point
-      if (rowi < 0 || rowi > MAX_ROW)
-        continue;  // out of bounds
-      if (colj < 0 || colj > MAX_COL)
+      if (rowi < 0 || rowi > MAX_ROW || colj < 0 || colj > MAX_COL)
         continue;  // out of bounds
       if (!isdigit(schematic[rowi][colj]) && schematic[rowi][colj] != '.') {
         if (schematic[rowi][colj] == '*') {
@@ -37,23 +35,16 @@ bool isAdjacent(const vector<vector<char>>& schematic,
   return false;
 }
 
-void getData(istream& in, vector<vector<char>>& schematic) {
-  while (in.peek() != EOF) {
-    vector<char> line;
-    char c;
-    while (in.peek() != '\n' && in.peek() != EOF) {
-      in.get(c);
-      line.push_back(c);
-    }
-    in.get(c);
-    schematic.push_back(line);
-    line.clear();
+void getData(istream& in, vector<string>& schematic) {
+  string s;
+  while (getline(in, s) && s.size()) {
+    schematic.push_back(s);
   }
 }
 
-void findNumbers(const vector<vector<char>>& schematic,
-                 vector<int64_t>& numbers,
-                 map<int64_t, set<int64_t>>& gear2part) {
+int64_t findNumbers(const vector<string>& schematic,
+                    map<int64_t, set<int64_t>>& gear2part) {
+  int64_t sum = 0;
   int64_t num = 0;
   bool is_adjacent = false;
   vector<int64_t> gears;
@@ -68,7 +59,7 @@ void findNumbers(const vector<vector<char>>& schematic,
         }
       } else {
         if (is_adjacent) {
-          numbers.push_back(num);
+          sum += num;
           for (auto gear : gears) {
             if (gear2part.find(gear) == gear2part.end()) {
               std::set<int64_t> newset;
@@ -87,6 +78,7 @@ void findNumbers(const vector<vector<char>>& schematic,
       }
     }
   }
+  return sum;
 }
 
 int64_t ratioSum(map<int64_t, set<int64_t>>& gear2part) {
@@ -104,15 +96,12 @@ int64_t ratioSum(map<int64_t, set<int64_t>>& gear2part) {
 
 #ifndef EXCLUDE_MAIN
 int main(int argc, char* argv[]) {
-  vector<vector<char>> schematic;
+  vector<string> schematic;
   getData(cin, schematic);
 
-  vector<int64_t> numbers;
   map<int64_t, set<int64_t>> gear2part;
-  findNumbers(schematic, numbers, gear2part);
-  int64_t result = ratioSum(gear2part);
-  cout << accumulate(numbers.begin(), numbers.end(), 0) << "\n";
-  cout << result << "\n";
+  cout << findNumbers(schematic, gear2part) << "\n"
+       << ratioSum(gear2part) << "\n";
   return 0;
 }
 #endif

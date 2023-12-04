@@ -1,9 +1,6 @@
 {
-  "cmake.debugConfig": {
-    "args": [
-      "<",
-      "${command:cmake.activeFolderPath}/${command:cmake.buildTargetName}/user.input"
-    ]
+  "cmake.environment": {
+    "BASE_DIR": "${workspaceFolder}"
   },
   "editor.formatOnSave": true,
   "cmake.options.statusBarVisibility": "visible"

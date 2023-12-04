@@ -1,26 +1,22 @@
 #include <stdint.h>
-#include <vector>
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-int64_t return1(){ return 1; }
-
-void getData(vector<int64_t> &in){
+void getData(istream& in, vector<int64_t>& data) {
   string s;
-  while(getline(cin, s)){
-    if( s.size()!=0 ){
-      in.push_back(atoi(s.c_str()));
-    }
+  while (getline(cin, s) && s.size()) {
+    data.push_back(atoi(s.c_str()));
   }
 }
 
 #ifndef EXCLUDE_MAIN
-int main(int argc, char *argv[]){
+int main(int argc, char* argv[]) {
   vector<int64_t> data;
-  getData(data);
-  for( auto it : data ){
+  getData(cin, data);
+  for (auto it : data) {
     cout << it << "\n";
   }
 

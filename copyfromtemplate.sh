@@ -39,6 +39,9 @@ cp ${TEMPLATE_DIR}/test_template.cpp ${DEST_DIR}/test_${NEW_DAY}.cpp
 cp ${TEMPLATE_DIR}/CMakeLists.txt ${DEST_DIR}
 
 sed -i "s/template/${NEW_DAY}/g" ${DEST_DIR}/CMakeLists.txt
+sed -i "s/Template/Test${NEW_DAY}/g" ${DEST_DIR}/CMakeLists.txt
+sed -i "s/template/${NEW_DAY}/g" ${DEST_DIR}/test_${NEW_DAY}.cpp
+
 
 echo "add_subdirectory( ${NEW_DAY} )" >> CMakeLists.txt
 

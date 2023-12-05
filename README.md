@@ -13,3 +13,6 @@
 - When switching between build kits, you will need to delete the build directory for GTest and Raylib.
 - The 2021 stuff is a warmup.
 - Days 1 to 3 and warmus from 2021 get their input different from Days 4 and beyond.  The original method used redirection to provide the input.  There are quirks with VSCode that make this less than desirable.  The build/input method of the data was revised to simplify this from a developer perspective.  The new method eliminates the need for the `launch.json` file.  Oddly enough, the Testing tab of VSCode requires one to launch a particular test in debug (not run) mode.  If you want to debug a particular test, simply select it as the CMake Tools launch target and click the debug icon there. 
+
+## Day Notes
+- Day 5 - Part 2 is less than optimal and took about 4-5 hours to run on an AMD Ryzen 5 5600G.

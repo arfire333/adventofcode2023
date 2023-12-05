@@ -7,7 +7,7 @@ class Test2023Day04 : public testing::Test {
   vector<vector<int64_t> > data;
   vector<int64_t> card_count;
   void SetUp() override {
-    string filename = userDataFilename("2023day04", "example.input");
+    string filename = aoc::dataFilename("2023day04", "example.input");
     ifstream in(filename);
     getData(in, winners, data);
     card_count.resize(winners.size(), 1);

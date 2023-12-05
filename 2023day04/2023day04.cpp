@@ -1,3 +1,4 @@
+#include <libaoc.h>
 #include <stdint.h>
 #include <algorithm>
 #include <cmath>
@@ -11,13 +12,6 @@
 #include <vector>
 
 using namespace std;
-
-string userDataFilename(char* argv0, string dataset = "user.input") {
-  stringstream ss;
-  ss << getenv("BASE_DIR") << "/"
-     << std::filesystem::path(argv0).stem().string() << "/" << dataset;
-  return ss.str();
-}
 
 vector<int64_t> getNumbers(const string s) {
   vector<int64_t> nums;
@@ -72,7 +66,7 @@ int64_t scoreGame(const vector<int64_t> winner, const vector<int64_t> nums) {
 
 #ifndef EXCLUDE_MAIN
 int main(int argc, char* argv[]) {
-  string filename = userDataFilename(argv[0]);
+  string filename = aoc::dataFilename(argv[0]);
   ifstream in(filename);
   vector<vector<int64_t>> winners;
   vector<vector<int64_t>> data;

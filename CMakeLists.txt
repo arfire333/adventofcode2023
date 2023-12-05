@@ -38,6 +38,7 @@ if (NOT raylib_FOUND)
 endif()
 
 
+add_subdirectory( libaoc )
 add_subdirectory( template )
 add_subdirectory( 2021day01 )
 add_subdirectory( 2021day02 )
@@ -46,3 +47,4 @@ add_subdirectory( 2023day01 )
 add_subdirectory( 2023day02 )
 add_subdirectory( 2023day03 )
 add_subdirectory( 2023day04 )
+add_subdirectory( 2023day05 )

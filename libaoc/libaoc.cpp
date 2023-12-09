@@ -18,10 +18,14 @@ vector<int64_t> getNumbers(const string s) {
   do {
     start = s.find_first_of("0123456789", end);
     end = s.find_first_not_of("0123456789", start);
+    int sign = 1;
+    if (start > 0 && s[start - 1] == '-') {
+      sign = -1;
+    }
     if (start >= 0) {
       string num = s.substr(start, end);
       char* p_end{};
-      nums.push_back(strtoll(num.c_str(), &p_end, 10));
+      nums.push_back(sign * strtoll(num.c_str(), &p_end, 10));
     }
   } while (end != string::npos);
   return nums;

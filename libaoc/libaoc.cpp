@@ -4,17 +4,17 @@
 #include <sstream>
 using namespace std;
 namespace aoc {
-string dataFilename(const char* argv0, const string dataset) {
+string dataFilename(const char* argv0, string_view dataset) {
   stringstream ss;
   ss << getenv("BASE_DIR") << "/" << filesystem::path(argv0).stem().string()
      << "/" << dataset;
   return ss.str();
 }
 
-vector<int64_t> getNumbers(const string s) {
+vector<int64_t> getNumbers(string_view s) {
   vector<int64_t> nums;
-  int start = 0;
-  int end = 0;
+  int64_t start = 0;
+  int64_t end = 0;
   do {
     start = s.find_first_of("0123456789", end);
     end = s.find_first_not_of("0123456789", start);
@@ -22,10 +22,9 @@ vector<int64_t> getNumbers(const string s) {
     if (start > 0 && s[start - 1] == '-') {
       sign = -1;
     }
-    if (start >= 0) {
-      string num = s.substr(start, end);
-      char* p_end{};
-      nums.push_back(sign * strtoll(num.c_str(), &p_end, 10));
+    if (start >= 0 && start != string::npos) {
+      string num(s.substr(start, end));
+      nums.push_back(sign * strtoll(num.c_str(), nullptr, 10));
     }
   } while (end != string::npos);
   return nums;

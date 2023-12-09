@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <set>
 #include <sstream>
 #include <string>
@@ -13,15 +14,15 @@
 
 using namespace std;
 
-vector<int64_t> getNumbers(const string s) {
+vector<int64_t> getNumbers(string_view s) {
   vector<int64_t> nums;
-  int start = 0;
-  int end = 0;
+  size_t start = 0;
+  size_t end = 0;
   do {
     start = s.find_first_of("0123456789", end);
     end = s.find_first_not_of("0123456789", start);
-    if (start >= 0) {
-      nums.push_back(atoi(s.substr(start, end).c_str()));
+    if (start != string::npos) {
+      nums.push_back(atoi(string(s.substr(start, end)).c_str()));
     }
   } while (end != string::npos);
   return nums;
@@ -32,9 +33,8 @@ void getData(istream& in,
              vector<vector<int64_t>>& data) {
   string s;
   while (getline(in, s) && s.size()) {
-    int colon = s.find_first_of(':') + 1;
-    int bar = s.find_first_of('|') + 1;
-    int start = colon;
+    size_t colon = s.find_first_of(':') + 1;
+    size_t bar = s.find_first_of('|') + 1;
     string win = s.substr(colon + 1, bar - colon - 3);
     string tic = s.substr(bar + 1);
     auto winning = getNumbers(win);
@@ -46,7 +46,7 @@ void getData(istream& in,
   }
 }
 
-int64_t scoreGame(const vector<int64_t> winner, const vector<int64_t> nums) {
+int64_t scoreGame(const vector<int64_t>& winner, const vector<int64_t>& nums) {
   int score = 1;
   int j = 0;
   for (auto i = 0; i < winner.size() && j < nums.size();) {
@@ -81,9 +81,9 @@ int main(int argc, char* argv[]) {
   vector<int64_t> card_count(winners.size(), 1);
   int64_t score = 0;
   for (int i = 0; i < winners.size() && i < data.size(); i++) {
-    int gamescore = scoreGame(winners[i], data[i]);
+    int64_t gamescore = scoreGame(winners[i], data[i]);
     score += gamescore;
-    int wincount = log2(gamescore) + 1;
+    int wincount = static_cast<int>(log2(gamescore)) + 1;
     for (int k = 0; k < card_count[i]; k++) {
       for (int j = 1; j <= wincount; j++) {
         card_count[i + j] = card_count[i + j] + 1;
@@ -91,9 +91,7 @@ int main(int argc, char* argv[]) {
     }
   }
   int64_t total_cards = 0;
-  for (int i = 0; i < card_count.size(); i++) {
-    total_cards += card_count[i];
-  }
+  total_cards = std::accumulate(card_count.begin(), card_count.end(), 0);
 
   cout << "Total Points: " << score << "\n";
   cout << "Total Cards: " << total_cards << "\n";

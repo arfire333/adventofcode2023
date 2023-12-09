@@ -5,15 +5,14 @@
 #include <set>
 #include <string>
 #include <vector>
-
 using namespace std;
 
 bool isAdjacent(const vector<string>& schematic,
                 int row,
                 int col,
                 int64_t& gear) {
-  int MAX_ROW = schematic.size() - 1;
-  int MAX_COL = schematic[0].size() - 1;
+  size_t MAX_ROW = schematic.size() - 1;
+  size_t MAX_COL = schematic[0].size() - 1;
   for (int i = -1; i <= 1; i++) {
     for (int j = -1; j <= 1; j++) {
       int rowi = row + i;
@@ -64,7 +63,7 @@ int64_t findNumbers(const vector<string>& schematic,
             if (gear2part.find(gear) == gear2part.end()) {
               std::set<int64_t> newset;
               newset.insert(num);
-              gear2part.insert({gear, newset});
+              gear2part.try_emplace(gear, newset);
             } else {
               gear2part.at(gear).insert(num);
             }
@@ -81,14 +80,14 @@ int64_t findNumbers(const vector<string>& schematic,
   return sum;
 }
 
-int64_t ratioSum(map<int64_t, set<int64_t>>& gear2part) {
+int64_t ratioSum(const map<int64_t, set<int64_t>>& gear2part) {
   int64_t sum = 0;
-  for (auto it : gear2part) {
-    if (it.second.size() != 2) {
+  for (const auto& [key, value] : gear2part) {
+    if (value.size() != 2) {
       continue;
     }
-    int64_t first = *it.second.begin();
-    int64_t second = *it.second.rbegin();
+    int64_t first = *value.begin();
+    int64_t second = *value.rbegin();
     sum += first * second;
   }
   return sum;

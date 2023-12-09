@@ -16,14 +16,14 @@ class SparseMap {
   vector<bool> visited;
 
  public:
-  void name(string name) { map_name = name; }
-  string name() { return map_name; }
+  void name(std::string_view name) { map_name = name; }
+  string name() const { return map_name; }
   /**
    * Return the destination for a given source.
    */
   int64_t at(int64_t source) {
     int l = 0;
-    int r = entries.size() - 1;
+    int r = static_cast<int>(entries.size()) - 1;
     while (l <= r) {
       int delta = (r - l) / 2;
       int i = l + delta;
@@ -46,7 +46,7 @@ class SparseMap {
 
   void sort_entries() {
     sort(entries.begin(), entries.end(),
-         [](const vector<int64_t> lhs, const vector<int64_t> rhs) {
+         [](const vector<int64_t>& lhs, const vector<int64_t>& rhs) {
            return lhs[1] < rhs[1];
          });
   }
@@ -55,8 +55,9 @@ class SparseMap {
 void getData(istream& in, vector<int64_t>& seeds, vector<SparseMap>& maps) {
   string s;
   getline(in, s);
-  int colon = s.find_first_of(':');
-  seeds = aoc::getNumbers(s.substr(colon + 1));
+  size_t colon = s.find_first_of(':');
+  string_view sv = s;
+  seeds = aoc::getNumbers(sv.substr(colon + 1));
   getline(in, s);
   while (getline(in, s) && s.size()) {
     SparseMap current;
@@ -69,7 +70,7 @@ void getData(istream& in, vector<int64_t>& seeds, vector<SparseMap>& maps) {
   }
 }
 
-void part1(const vector<int64_t> seeds, const vector<SparseMap> maps) {
+void part1(const vector<int64_t>& seeds, const vector<SparseMap>& maps) {
   int64_t min_location = INT64_MAX;
   int64_t recommended_seed = 0;
   for (auto seed : seeds) {
@@ -89,7 +90,7 @@ void part1(const vector<int64_t> seeds, const vector<SparseMap> maps) {
        << recommended_seed << "\n";
 }
 
-void part2(const vector<int64_t> seeds, const vector<SparseMap> maps) {
+void part2(const vector<int64_t>& seeds, const vector<SparseMap>& maps) {
   int64_t min_location = INT64_MAX;
   int64_t recommended_seed = 0;
   for (int i = 0; i < seeds.size(); i += 2) {
@@ -98,8 +99,7 @@ void part2(const vector<int64_t> seeds, const vector<SparseMap> maps) {
         cout << "Seed #: " << seed << "\n";
       }
       int64_t next = seed;
-      for (int i = 0; i < maps.size(); i++) {
-        auto map = maps[i];
+      for (auto map : maps) {
         next = map.at(next);
       }
       if (next >= 0 && next < min_location) {
@@ -114,8 +114,9 @@ void part2(const vector<int64_t> seeds, const vector<SparseMap> maps) {
 
 #ifndef EXCLUDE_MAIN
 int main(int argc, char* argv[]) {
-  string filename = aoc::dataFilename(argv[0], "user.input");
-  // string filename = aoc::dataFilename(argv[0], "example.input");
+  string filename = aoc::dataFilename(
+      argv[0],
+      "user.input");  // Replace user with example to see run on example dataset
   ifstream in(filename);
   vector<int64_t> seeds;
   vector<SparseMap> maps;

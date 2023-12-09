@@ -12,13 +12,8 @@
 using namespace std;
 
 class Hand {
-  int64_t _bet;
-  std::string _cards;
-
-  static map<const char, int8_t> CARD_STRENGTH;
-
  public:
-  enum HAND_TYPES {
+  enum struct HAND_TYPES {
     UNKNOWN = 0,
     FIVE = 7,
     FOUR = 6,
@@ -27,13 +22,9 @@ class Hand {
     TWO = 3,
     ONE = 2,
     HIGH = 1
-  } hand_type = UNKNOWN;
-
- public:
-  Hand(string cards, int64_t bet)
-      : _bet(bet), _cards(cards), hand_type(UNKNOWN) {
-    type();
   };
+
+  Hand(string const& cards, int64_t bet) : _bet(bet), _cards(cards) { type(); };
   friend ostream& operator<<(ostream& os, const Hand& hand) {
     os << hand._cards << " " << hand._bet;
     return os;
@@ -47,10 +38,10 @@ class Hand {
                CARD_STRENGTH[r._cards[1]], CARD_STRENGTH[r._cards[2]],
                CARD_STRENGTH[r._cards[3]], CARD_STRENGTH[r._cards[4]]);
   }
-  int64_t bet() { return _bet; }
-  string cards() { return _cards; }
+  int64_t bet() const { return _bet; }
+  string cards() const { return _cards; }
   HAND_TYPES type() {
-    if (hand_type != UNKNOWN) {
+    if (hand_type != HAND_TYPES::UNKNOWN) {
       return hand_type;
     }
     vector<int8_t> count(CARD_STRENGTH.size(), 0);
@@ -68,23 +59,29 @@ class Hand {
       has[it]++;
     }
     if (has[5]) {
-      hand_type = FIVE;
+      hand_type = HAND_TYPES::FIVE;
     } else if (has[4]) {
-      hand_type = FOUR;
+      hand_type = HAND_TYPES::FOUR;
     } else if (has[3] == 1 && has[2] == 1 || has[3] == 2) {
-      hand_type = FULL;
+      hand_type = HAND_TYPES::FULL;
     } else if (has[3]) {
-      hand_type = THREE;
+      hand_type = HAND_TYPES::THREE;
     } else if (has[2] == 2) {
-      hand_type = TWO;
+      hand_type = HAND_TYPES::TWO;
     } else if (has[2]) {
-      hand_type = ONE;
+      hand_type = HAND_TYPES::ONE;
     } else {
-      hand_type = HIGH;
+      hand_type = HAND_TYPES::HIGH;
     }
 
     return hand_type;
   }
+
+ private:
+  int64_t _bet;
+  std::string _cards;
+  static map<const char, int8_t> CARD_STRENGTH;
+  HAND_TYPES hand_type = HAND_TYPES::UNKNOWN;
 };
 
 map<const char, int8_t> Hand::CARD_STRENGTH = {
@@ -94,11 +91,11 @@ map<const char, int8_t> Hand::CARD_STRENGTH = {
 void getData(istream& in, vector<Hand>& hands) {
   string s;
   while (getline(in, s) && s.size()) {
-    int split = s.find_first_of(" ");
+    size_t split = s.find_first_of(" ");
     string bet_s = s.substr(split, string::npos);
     int64_t bet = strtoll(bet_s.c_str(), nullptr, 10);
     string hand = s.substr(0, split);
-    hands.push_back(Hand(hand, bet));
+    hands.emplace_back(hand, bet);
   }
 }
 
@@ -113,7 +110,7 @@ int main(int argc, char* argv[]) {
   sort(hands.begin(), hands.end());
   int64_t winnings = 0;
   int64_t rank = 1;
-  for (auto hand : hands) {
+  for (auto const& hand : hands) {
     winnings += hand.bet() * rank;
     cout << hand.cards() << " " << rank << " " << hand.bet()
          << " total=" << winnings << "\n";

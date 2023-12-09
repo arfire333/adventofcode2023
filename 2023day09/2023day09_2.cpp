@@ -25,11 +25,11 @@ int main(int argc, char* argv[]) {
   getData(in, data);
   int64_t sum = 0;
   for (auto& history : data) {
-    int max = 1;
-    int S = history[0].size();
+    int64_t max = 1;
+    size_t S = history[0].size();
     int row = 0;
     do {
-      history.push_back(vector<int64_t>(S, 0));
+      history.emplace_back(S, 0);
       auto& l = history[history.size() - 2];
       auto& h = history[history.size() - 1];
       max = 0;
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
         if (h[i - 1] != 0) {
           max = h[i - 1];
         }
-      };
+      }
     } while (max != 0);
     row--;
     while (row > 0) {

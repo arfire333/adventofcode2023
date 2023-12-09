@@ -3,5 +3,6 @@
     "BASE_DIR": "${workspaceFolder}"
   },
   "editor.formatOnSave": true,
-  "cmake.options.statusBarVisibility": "visible"
+  "cmake.options.statusBarVisibility": "visible",
+  "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json"
 }

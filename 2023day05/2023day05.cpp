@@ -21,7 +21,7 @@ class SparseMap {
   /**
    * Return the destination for a given source.
    */
-  int64_t at(int64_t source) {
+  int64_t at(int64_t source) const {
     int l = 0;
     int r = static_cast<int>(entries.size()) - 1;
     while (l <= r) {
@@ -76,7 +76,7 @@ void part1(const vector<int64_t>& seeds, const vector<SparseMap>& maps) {
   for (auto seed : seeds) {
     int64_t next = seed;
     cout << next << ",";
-    for (auto map : maps) {
+    for (const auto& map : maps) {
       next = map.at(next);
       cout << next << ",";
     }
@@ -99,7 +99,7 @@ void part2(const vector<int64_t>& seeds, const vector<SparseMap>& maps) {
         cout << "Seed #: " << seed << "\n";
       }
       int64_t next = seed;
-      for (auto map : maps) {
+      for (const auto& map : maps) {
         next = map.at(next);
       }
       if (next >= 0 && next < min_location) {

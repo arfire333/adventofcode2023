@@ -28,48 +28,51 @@ bool match(const char l, const char r) {
   return l == r;
 }
 
-bool col_match(const vector<string>& pattern, int left, int right) {
+int col_match(const vector<string>& pattern, int left, int right) {
   if (left < 0) {
-    return false;
+    return 0;
   }
   if (right > pattern[0].size()) {
-    return false;
+    return 0;
   }
-  return std::all_of(
-      pattern.begin(), pattern.end(),
-      [left, right](const string& row) { return row[left] == row[right]; });
-}
-
-bool row_match(const vector<string>& pattern, int top, int bot) {
-  if (top < 0) {
-    return false;
-  }
-  if (bot >= pattern.size()) {
-    return false;
-  }
-  for (int i = 0; i < pattern[0].size(); i++) {
-    if (pattern[top][i] != pattern[bot][i]) {
-      return false;
+  int count = 0;
+  for (int i = 0; i < pattern.size(); i++) {
+    if (pattern[i][left] != pattern[i][right]) {
+      count++;
     }
   }
-  return true;
+  return count;
+}
+
+int row_match(const vector<string>& pattern, int top, int bot) {
+  if (top < 0) {
+    return static_cast<int>(pattern[0].size());
+  }
+  if (bot >= pattern.size()) {
+    return static_cast<int>(pattern[0].size());
+  }
+  int count = 0;
+  for (int i = 0; i < pattern[0].size(); i++) {
+    if (pattern[top][i] != pattern[bot][i]) {
+      count++;
+    }
+  }
+  return count;
 }
 int horizontal_split(const vector<string>& pattern) {
   int success = 0;
   for (int start = 0; start < pattern.size(); start++) {
     int top = start;
     int bot = top + 1;
-    bool mirror = false;
+    int count = 0;
     while (top >= 0 && bot < pattern.size()) {
-      mirror = row_match(pattern, top, bot);
-      if (!mirror) {
-        break;
-      }
+      count += row_match(pattern, top, bot);
       top--;
       bot++;
     }
-    if (mirror) {
+    if (count == 1) {
       success = start + 1;
+      break;
     }
   }
   return success;
@@ -79,17 +82,15 @@ int vertical_split(const vector<string>& pattern) {
   for (int start = 0; start < pattern[0].size(); start++) {
     int left = start;
     int right = left + 1;
-    bool mirror = false;
+    int count = 0;
     while (left >= 0 && right < pattern[0].size()) {
-      mirror = col_match(pattern, left, right);
-      if (!mirror) {
-        break;
-      }
+      count += col_match(pattern, left, right);
       left--;
       right++;
     }
-    if (mirror) {
+    if (count == 1) {
       success = start + 1;
+      break;
     }
   }
   return success;
@@ -115,10 +116,11 @@ int main(int argc, char* argv[]) {
     cout << string(pattern[0].size(), '=') << " " << i << " height=" << height
          << " width=" << width << " hsplit=" << hsplit << " vsplit=" << vsplit
          << "\n";
+
+    total += 100 * hsplit + vsplit;
     for (const auto& line : pattern) {
       cout << line << "\n";
     }
-    total += 100 * hsplit + vsplit;
   }
   cout << "Even Count: " << even_count << "\n";
   cout << "Total Count: " << total << "\n";

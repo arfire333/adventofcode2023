@@ -1,10 +1,10 @@
 #include <libaoc.h>
 #include <stdint.h>
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
-
 using namespace std;
 
 const int64_t SEED = 0;
@@ -44,19 +44,18 @@ struct step_t {
 };
 
 void dash(vector<step_t>& lenses, const step_t& step) {
-  for (auto lense = lenses.begin(); lense != lenses.end(); lense++) {
-    if (lense->label.compare(step.label) == 0) {
-      lense = lenses.erase(lense);
-      break;
-    }
-  }
+  lenses.erase(remove_if(lenses.begin(), lenses.end(),
+                         [&step](const step_t& lense) {
+                           return lense.label.compare(step.label) == 0;
+                         }),
+               lenses.end());
 }
 
 void focus(vector<step_t>& lenses, const step_t& step) {
   bool replaced = false;
-  for (auto lense = lenses.begin(); lense != lenses.end(); lense++) {
-    if (lense->label.compare(step.label) == 0) {
-      lense->focal_length = step.focal_length;
+  for (auto& lense : lenses) {
+    if (lense.label.compare(step.label) == 0) {
+      lense.focal_length = step.focal_length;
       replaced = true;
       break;
     }
@@ -79,7 +78,7 @@ int64_t power(const vector<vector<step_t>>& boxes) {
 
 #ifndef EXCLUDE_MAIN
 int main(int argc, char* argv[]) {
-  string filename = aoc::dataFilename("2023day15", "user.input");
+  string filename = aoc::dataFilename("2023day15", "example.input");
   ifstream in(filename);
   vector<string> input = getData(in);
   vector<struct step_t> steps;

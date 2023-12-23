@@ -13,6 +13,7 @@
 using namespace std;
 
 using part_t = map<char, int64_t>;
+using part_range_t = map<char, pair<int64_t, int64_t>>;
 
 enum class part_state { ACCEPT, REJECT };
 
@@ -57,6 +58,35 @@ class workflow {
   workflow(const string& name, const string& checks)
       : name(name), checks(checks) {
     parseChecks();
+  }
+  void process(const map<string, workflow, std::less<>>& workflows,
+               const part_range_t& part_range,
+               vector<part_range_t>& accepted,
+               size_t i = 0) const {
+    auto curr_var = var[i];
+    auto curr_op = op[i];
+    auto curr_val = val[i];
+    part_range_t true_range = part_range;
+    part_range_t false_range = part_range;
+    if (curr_op == '>') {
+      true_range.at(curr_var).first = curr_val + 1;
+      false_range.at(curr_var).second = curr_val;
+    } else {  // '<'
+      true_range.at(curr_var).second = curr_val - 1;
+      false_range.at(curr_var).first = curr_val;
+    }
+    if (true_result[i].compare("A") == 0) {
+      accepted.push_back(true_range);
+    } else if (true_result[i].compare("R") != 0) {
+      workflows.at(true_result[i]).process(workflows, true_range, accepted);
+    }
+    if (false_result[i].compare("A") == 0) {
+      accepted.push_back(false_range);
+    } else if (false_result[i][0] < '\010') {
+      process(workflows, false_range, accepted, i + 1);
+    } else if (false_result[i].compare("R") != 0) {
+      workflows.at(false_result[i]).process(workflows, false_range, accepted);
+    }
   }
   // process a part through the workflow
   part_state process(const map<string, workflow, std::less<>>& workflows,
@@ -139,6 +169,19 @@ int main(int argc, char* argv[]) {
     }
   }
   cout << "Part 1: " << sum << "\n";
+  part_range_t max_range = {
+      {'m', {1, 4000}}, {'x', {1, 4000}}, {'a', {1, 4000}}, {'s', {1, 4000}}};
+  vector<part_range_t> accepted;
+  workflows.at("in").process(workflows, max_range, accepted);
+  sum = 0;
+  for (const auto& part : accepted) {
+    int64_t product = 1;
+    for_each(part.begin(), part.end(), [&product](auto range) {
+      product *= range.second.second - range.second.first + 1;
+    });
+    sum += product;
+  }
+  cout << "Part 2: " << sum << "\n";
   return 0;
 }
 #endif

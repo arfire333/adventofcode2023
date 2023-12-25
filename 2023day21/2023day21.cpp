@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -58,7 +59,38 @@ int64_t part1_steps(const vector<string>& elfmap,
 
   return currset.size();
 }
+int64_t part2_steps(const vector<string>& elfmap,
+                    pos_t start,
+                    int num_steps = 6) {
+  int64_t height = elfmap.size();
+  int64_t width = elfmap[0].size();
+  set<pos_t> currset = {start};
+  set<pos_t> nextset;
+  for (auto i = 0; i < num_steps; i++) {
+    nextset.clear();
+    for (auto p : currset) {
+      for (const auto& shift : SHIFTS) {
+        pos_t check = {(p.r + shift.r), (p.c + shift.c)};
+        pos_t next = check;
+        check.r = check.r % height;
+        check.c = check.c % width;
+        if (check.r < 0) {
+          check.r += height;
+        };
+        if (check.c < 0) {
+          check.c += width;
+        };
+        if (elfmap[check.r][check.c] == '#') {
+          continue;
+        }
+        nextset.insert(next);
+      }
+    }
+    swap(currset, nextset);
+  }
 
+  return currset.size();
+}
 int64_t pos2idx(const pos_t& position, int64_t width) {
   return position.r * width + position.c;
 }
@@ -77,14 +109,15 @@ vector<vector<int64_t>> part2_prep(const vector<string>& elfmap) {
       pos_t p = {r, c};
       int64_t p_idx = pos2idx(p, width);
       for (const auto& shift : SHIFTS) {
-        pos_t next = {(p.r + shift.r) % height, (p.c + shift.c) % width};
-        if (next.r < 0) {
-          next.r += height;
+        pos_t check = {(p.r + shift.r), (p.c + shift.c)};
+        auto next = check;
+        if (check.r < 0) {
+          check.r += height;
         };
-        if (next.c < 0) {
-          next.c += width;
+        if (check.c < 0) {
+          check.c += width;
         };
-        if (elfmap[next.r][next.c] != '#') {
+        if (elfmap[check.r][check.c] != '#') {
           int64_t next_idx = pos2idx(next, width);
           adj[p_idx][next_idx]++;
         }
@@ -113,7 +146,11 @@ int main(int argc, char* argv[]) {
     cout << row << "\n";
   }
   cout << part1_steps(elfmap, start, 64) << "\n";
-  auto adj = part2_prep(elfmap);
-  print(adj);
+  cout << part2_steps(elfmap, start, 6) << "\n";
+  cout << part2_steps(elfmap, start, 5) << "\n";
+  cout << part2_steps(elfmap, start, 10) << "\n";
+  cout << part2_steps(elfmap, start, 50) << "\n";
+  cout << part2_steps(elfmap, start, 100) << "\n";
+  cout << part2_steps(elfmap, start, 500) << "\n";
   return 0;
 }

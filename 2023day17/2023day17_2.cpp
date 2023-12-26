@@ -179,7 +179,7 @@ int64_t plan(const vector<string>& city) {
     }
   }
 
-  for (auto&& [f, s] : dist) {
+  for (const auto& [f, s] : dist) {
     if (f.row == CITY_LENGTH - 1 && f.col == CITY_WIDTH - 1 &&
         s < min_heatloss) {
       min_heatloss = s;
@@ -191,7 +191,7 @@ int64_t plan(const vector<string>& city) {
 }
 #ifndef EXCLUDE_MAIN
 int main(int argc, char* argv[]) {
-  string filename = aoc::dataFilename("2023day17", "user.input");
+  string filename = aoc::dataFilename("2023day17", "example.input");
   ifstream in(filename);
   vector<string> city;
   getData(in, city);

@@ -82,7 +82,7 @@ int64_t plan(const vector<string>& city) {
   for (auto r = 0; r < CITY_LENGTH; r++) {
     for (auto c = 0; c < CITY_WIDTH; c++) {
       for (auto t = 1; t <= 3; t++) {
-        for (auto d : pos_dir) {
+        for (const auto& d : pos_dir) {
           q.emplace_back(r, c, t, d);
         }
       }
@@ -168,7 +168,7 @@ int64_t plan(const vector<string>& city) {
     visited.insert(curr);
   }
 
-  for (auto&& [f, s] : dist) {
+  for (const auto& [f, s] : dist) {
     if (f.row == CITY_LENGTH - 1 && f.col == CITY_WIDTH - 1 &&
         s < min_heatloss) {
       min_heatloss = s;
